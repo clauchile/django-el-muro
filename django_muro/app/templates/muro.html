@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block titulo %}INDEX USUARIO{% endblock %}
+
+{% block contenido %}
+
+<h3 class="mt-2">Deja un mensaje</h3>
+<div class="row">
+  <div class=" col-12 col-md-5">
+    <!-- formulario Mensaje -->
+    <form action='/muro/' method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <!-- <label for="mensaje" class="form-label">Comentario</label> -->
+        <!-- <input type="textarea" class="form-control" " name="comment" value=""> -->
+        <textarea class="form-control" id="id_comment" name="mensaje" rows="6"
+          placeholder="Escriba su mensaje aqui"></textarea>
+      </div>
+      <div class="text-end">
+        <button type="submit" class="btn btn-primary btn-sm"><i
+          class="fas fa-plus-circle me-1"></i>Agrega un mensaje</button>
+
+      </div>
+    </form>
+    <hr>
+  </div>
+</div>
+<!-- MOstrar mensaje -->
+<div class="row">
+  <div class="col-12 col-md-5 bg-primary ">
+    <ul reversed="reversed" class="mt-2 list-group">
+      {% for msg in mensaje_list %}
+      <!-- <h1>{{Message.objects.all}}</h1> |o0p+ +++++++++++++++++++++++ -->
+      <li class="list-group-item">
+        <div class="d-flex">
+          <h6 class=" text-decoration-none mb-2 mt-2">{{msg.user.name}} - {{msg.created_at|date:"d M Y"}} </h6>
+          {% if request.session.user.id == msg.user.id %}
+          <a id="a"  class="  badge bg-danger border border-danger ms-3 py-1 my-2 " href="/muro/{{msg.id}}/mensaje/delete"><i class="far fa-trash-alt me-1"></i>Borrar
+            mensaje</a>
+          {% endif %}
+        </div>
+        <div class="text-break ms-2 fw-bold fst-italic">
+          <p clase="" name="id_comentario" value={{msg.user.id}}>{{msg.mensaje}}</p>
+        </div>
+        <div class="col ms-4">
+          <ul class="mt-2 list-group">
+            {% for cmt in comentario_list %}
+            {% if cmt.message.id == msg.id %}
+            <li class="list-group-item">
+              <div class="d-flex align-items-start">
+                <h6 class=" text-decoration-none mb-2 mt-2">{{cmt.user.name}} - {{cmt.message.created_at|date:"d M Y"}}
+                </h6>
+                {% if request.session.user.id == cmt.user.id %}
+                <a id="a" class="badge bg-danger border border-danger ms-3 py-1 my-2 " href="/muro/{{cmt.id}}/delete"><i class="far fa-trash-alt me-1"></i>Borrar
+                  comentario</a>
+                {% endif %}
+              </div>
+              <div class="text-break ms-2  fst-italic">
+                <p clase="" name="id_comentario">{{cmt.comentario}}</p>
+                <!-- <p clase="" name="id_comentario">{{cmt.user.id}}</p> -->
+
+              </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="text-end">
+          <form action="/muro/{{msg.id}}/" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <div class="text-start">
+                <label class="fs-6 " for="mensaje" class="form-label">Escriba un Comentario</label>
+                <input type="hidden" name="msgnum" value={{msg.id}}>
+              </div>
+              <!-- <input type="textarea" class="form-control" " name="comment" value=""> -->
+              <textarea class="form-control" id="id_comment" name="comentario" rows="3"
+                placeholder="escriba su comentario aqui"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm"><i
+              class="fas fa-plus-circle me-1"></i>Agregar comentario</button>
+            <!-- <p><a type="submit" class="badge bg-success border border-dark text-decoration-none" href="/muro/{{msg.user.id}}">comentar</a></p> -->
+          </form>
+          <!-- <hr style="height:2px;border-width:0;color:gray;background-color:rgb(25, 9, 245)"> -->
+          <hr id="hr">
+        </div>
+      </li>
+      {%endfor%}
+    </ul>
+  </div>
+</div>
+<!-- formulario comentario -->
+
+<!-- {{msg.users.name}} -->
+
+<!-- <h1>Bienvenid@: {{request.session.user.name}}</h1> -->
+<!-- <a href="/logout">SALIR DEL SISTEMA</a> -->
+
+{% endblock %}
+
+{% block libreria %}
+{% endblock %}

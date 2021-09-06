@@ -1,0 +1,26 @@
+.caja{
+    height: 200px;
+    width: 100%;
+    background-color: rgb(243, 242, 202)
+}
+
+#hr{
+    height:6px;
+    border-width:0;
+    color:rgb(220, 22, 22);
+    background-color:rgb(115, 8, 8)
+}
+
+
+a{
+    text-decoration: none;
+}
+@media only screen and (max-width: 600px) {
+    #a{height: 25px;}
+    #logout{
+        height: 30px;
+        padding-top: 2px;
+    
+    }
+
+}
