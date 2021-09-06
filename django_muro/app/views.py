@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 import bcrypt, time
 from .decorators import login_required
+# from datetime import datetime, time, timedelta
+from django.utils import timezone
 
 
 
@@ -105,17 +107,22 @@ def delete(request,num):
 
 def mensaje_delete(request,num):
 
-    # hora = Message.objects.all()
-    # for h in hora:
-    #     tiempo_transcurrido = time.time.now() - h.created_at
-    #     if tiempo_transcurrido > timedelta(days=2):
-    #         pass
+    elim = Message.objects.get(id = num)
+    
+    calc = calculate_minutos(elim.created_at)
+    if calc > 30:
+        messages.warning(request, "No es posible borrar el mensaje, han trascurrido mas de 30 min")
+    else: 
+        
+        elim.delete()
+        messages.success(request, " El mensaje fue eliminado")
+        print("mensaje eliminado", calc )
+    return redirect('/muro/')
 
-        dato = Message.objects.get(id=num)
+def calculate_minutos(fecha):
+    today = timezone.now()
 
-        dato.delete()
-        messages.success(request,f" el mensaje ha sido borrado con exito")
-        return redirect(f'/muro')
-
-
+    resultado = (today.year - fecha.year)*3652460 + (today.month - fecha.month)*302460 + (today.day - fecha.day)*2460 + (today.hour-fecha.hour)*60 + (today.minute-fecha.minute)
+    print(resultado)
+    return resultado
 
