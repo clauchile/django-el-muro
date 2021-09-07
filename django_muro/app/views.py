@@ -26,8 +26,8 @@ def muro(request):
         # print('campo fil', fil)
         context = {
             'saludo': 'Hola',
-            'mensaje_list': Message.objects.order_by('mensaje'),
-            'comentario_list':Comment.objects.order_by('comentario'),
+            'mensaje_list': Message.objects.order_by('-created_at'),
+            'comentario_list':Comment.objects.order_by('-created_at'),
             'id_delete': fil,
             'cuenta': cuenta
             # 'comentario_list': Comment.objects.filter(id= val),
@@ -65,8 +65,8 @@ def comentario(request,val):
             'saludo': 'Hola',
             # 'mensaje_list': Message.objects.filter(user__id = request.session['user']['id']),
             # 'comentario_list': Comment.objects.filter(id= val),
-            'comentario_list': Comment.objects.all(),
-            'mensaje_list': Message.objects.all(),
+            'comentario_list': Comment.objects.all().order_by('-created_at'),
+            'mensaje_list': Message.objects.all().order_by('-created_at'),
             'cuenta': Message.objects.filter(user__id = request.session['user']['id']).count()
             }
         
@@ -111,7 +111,7 @@ def mensaje_delete(request,num):
     
     calc = calculate_minutos(elim.created_at)
     if calc > 30:
-        messages.warning(request, "No es posible borrar el mensaje, han trascurrido mas de 30 min")
+        messages.warning(request, "No es posible borrar el mensaje, han transcurrido mas de 30 min")
     else: 
         
         elim.delete()

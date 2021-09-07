@@ -8,6 +8,8 @@ class UserManager(models.Manager):
         SOLO_LETRAS = re.compile(r'^[a-zA-Z. ]+$')
 
         errors = {}
+        if not postData['email']:
+            errors['no_registrado'] = "no estás registrado"
 
         if len(postData['name']) < 2:
             errors['firstname_len'] = " El nombre debe tener al menos 2 caracteres"
